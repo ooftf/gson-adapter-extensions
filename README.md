@@ -3,7 +3,7 @@
 添加String,Int,Long,Double,Long,Boolean 带有默认值的适配器
 # 使用方式
 ```
- implementation 'com.ooftf:gson-livedata-adapter:0.0.2'
+    implementation 'com.ooftf:gson-livedata-adapter:0.0.2'
  
     GsonBuilder().deployLiveData().deployDefaultValue().create()
 ```
