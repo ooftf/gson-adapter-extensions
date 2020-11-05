@@ -1,4 +1,4 @@
-package com.ooftf.engine.glda.adapter;
+package com.ooftf.engine.glda.engine;
 
 /**
  * Copyright (C) 2008 Google Inc.

@@ -1,4 +1,4 @@
-package com.ooftf.engine.glda.adapter;
+package com.ooftf.engine.glda.engine;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -11,12 +11,12 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-final class TypeAdapterRuntimeTypeWrapper<T> extends TypeAdapter<T> {
+public final class TypeAdapterRuntimeTypeWrapper<T> extends TypeAdapter<T> {
     private final Gson context;
     private final TypeAdapter<T> delegate;
     private final Type type;
 
-    TypeAdapterRuntimeTypeWrapper(Gson context, TypeAdapter<T> delegate, Type type) {
+    public TypeAdapterRuntimeTypeWrapper(Gson context, TypeAdapter<T> delegate, Type type) {
         this.context = context;
         this.delegate = delegate;
         this.type = type;

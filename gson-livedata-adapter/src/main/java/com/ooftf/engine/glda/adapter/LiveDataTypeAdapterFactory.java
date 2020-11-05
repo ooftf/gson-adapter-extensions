@@ -10,6 +10,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import com.ooftf.engine.glda.engine.GsonTypes;
+import com.ooftf.engine.glda.engine.TypeAdapterRuntimeTypeWrapper;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -17,7 +19,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 
 /**
- * Adapt a homogeneous collection of objects.
+ * Adapt a homogeneous LiveData of objects.
+ * @author 99474
  */
 public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
 
@@ -37,9 +40,7 @@ public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
         Type elementType = getLiveDataElementType(type, rawType);
         TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
 
-        @SuppressWarnings({"unchecked", "rawtypes"}) // create() doesn't define a type parameter
-                TypeAdapter<T> result = new LiveDataTypeAdapterFactory.Adapter(gson, elementType, elementTypeAdapter);
-        return result;
+        return new LiveDataTypeAdapterFactory.Adapter(gson, elementType, elementTypeAdapter);
     }
 
     /**
@@ -72,13 +73,13 @@ public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
         public LiveData<E> read(JsonReader in) throws IOException {
             if (in.peek() == JsonToken.NULL) {
                 in.nextNull();
-                return null;
+                return new MutableLiveData<E>();
             }
 
-            MutableLiveData<E> collection = new MutableLiveData<E>();
+            MutableLiveData<E> result = new MutableLiveData<E>();
             E instance = elementTypeAdapter.read(in);
-            collection.setValue(instance);
-            return collection;
+            result.setValue(instance);
+            return result;
         }
 
         @Override
