@@ -2,7 +2,6 @@ package com.ooftf.engine.glda.engine
 
 import com.google.gson.GsonBuilder
 import com.ooftf.engine.glda.adapter.*
-import com.ooftf.engine.glda.adapter.BooleanTypeAdapter
 import com.ooftf.engine.glda.observable.*
 
 /**
@@ -36,6 +35,12 @@ fun GsonBuilder.deployDefaultValue(): GsonBuilder {
     return this
 }
 
+fun GsonBuilder.deployCopyOnWrite(): GsonBuilder {
+    registerTypeAdapterFactory(CopyOnWriteListTypeAdapterFactory())
+    registerTypeAdapterFactory(CopyOnWriteSetTypeAdapterFactory())
+    return this
+}
+
 fun GsonBuilder.deployAll(): GsonBuilder {
-    return deployDefaultValue().deployLiveData().deployObservable()
+    return deployDefaultValue().deployLiveData().deployObservable().deployCopyOnWrite()
 }
