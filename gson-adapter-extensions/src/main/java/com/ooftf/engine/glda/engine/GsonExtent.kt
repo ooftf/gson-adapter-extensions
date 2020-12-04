@@ -35,12 +35,7 @@ fun GsonBuilder.deployDefaultValue(): GsonBuilder {
     return this
 }
 
-fun GsonBuilder.deployCopyOnWrite(): GsonBuilder {
-    registerTypeAdapterFactory(CopyOnWriteListTypeAdapterFactory())
-    registerTypeAdapterFactory(CopyOnWriteSetTypeAdapterFactory())
-    return this
-}
 
 fun GsonBuilder.deployAll(): GsonBuilder {
-    return deployDefaultValue().deployLiveData().deployObservable().deployCopyOnWrite()
+    return deployDefaultValue().deployLiveData().deployObservable()
 }
