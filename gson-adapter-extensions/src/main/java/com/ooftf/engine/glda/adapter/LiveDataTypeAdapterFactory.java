@@ -1,5 +1,8 @@
 package com.ooftf.engine.glda.adapter;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,6 +23,7 @@ import java.lang.reflect.WildcardType;
 
 /**
  * Adapt a homogeneous LiveData of objects.
+ *
  * @author 99474
  */
 public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
@@ -61,6 +65,20 @@ public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     private static final class Adapter<E> extends TypeAdapter<LiveData<E>> {
+        private static Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        public static boolean isMainThread() {
+            return Thread.currentThread() == Looper.getMainLooper().getThread();
+        }
+
+        public static void runOnUiThread(Runnable runnable) {
+            if (isMainThread()) {
+                runnable.run();
+            } else {
+                mainHandler.post(runnable);
+            }
+        }
+
         private final TypeAdapter<E> elementTypeAdapter;
 
         public Adapter(Gson context, Type elementType,
@@ -78,7 +96,7 @@ public final class LiveDataTypeAdapterFactory implements TypeAdapterFactory {
 
             MutableLiveData<E> result = new MutableLiveData<E>();
             E instance = elementTypeAdapter.read(in);
-            result.setValue(instance);
+            runOnUiThread(() -> result.setValue(instance));
             return result;
         }
 
